@@ -58,6 +58,8 @@ Based on how much GPU you have, you should change the `CUDA_VISIBLE_DEVICES` and
 
 An example log is at `reference.log`, note that this log use another set of configurations (e.g. `batch_size` is 1, etc.)
 
+There will also be a log dir in `./logs`, and it will contain checkpoints (`checkpoints`), the samples from the model during training (`images/train`), and some tf files (`testtube/version_0/tf`). It seems that the `ldm` environment can't read the tfrecord file due to version incompatibility, but a reasonable environment should be able to read it.
+
 ## 5. Eval FID
 
 ### Prepare the dataset for FID
