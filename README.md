@@ -82,6 +82,12 @@ Not implemented. We should first make sure the model can generate proper images.
 
 ## Download Pre-trained model and eval FID:
 
+### prepare the dataset for FID
+
+```bash
+python prep_fid_eval.py
+```
+
 ### download the model
 
 ```bash
