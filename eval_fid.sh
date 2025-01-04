@@ -2,4 +2,4 @@ fidelity --gpu 0 --fid --input2 ./eval_fid/celeba256_ref --input1 ./eval_fid/cel
 
 # sanity check
 # fidelity --gpu 0 --fid --input2 ./eval_fid/celeba256_ref --input1 ./eval_fid/celeba256_ref_valid_sanity
-# this should give ~3.5 FID
+# this sanity check should give ~3.5 FID
