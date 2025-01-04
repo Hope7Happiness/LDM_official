@@ -1,0 +1,8 @@
+**/__pycache__/*
+data/celebahq/
+latent_diffusion.egg-info/
+tmp/
+logs/
+*.ckpt
+*.zip
+eval_fid/
