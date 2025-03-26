@@ -6,3 +6,4 @@ logs/
 *.ckpt
 *.zip
 eval_fid/
+data/ffhq/
