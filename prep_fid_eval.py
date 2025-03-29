@@ -6,19 +6,19 @@ from torch.utils.data import Dataset, ConcatDataset
 import os
 from tqdm import trange
 
-class ConcatDatasetWithIndex(ConcatDataset):
-    """Modified from original pytorch code to return dataset idx"""
-    def __getitem__(self, idx):
-        if idx < 0:
-            if -idx > len(self):
-                raise ValueError("absolute value of index should not exceed dataset length")
-            idx = len(self) + idx
-        dataset_idx = bisect.bisect_right(self.cumulative_sizes, idx)
-        if dataset_idx == 0:
-            sample_idx = idx
-        else:
-            sample_idx = idx - self.cumulative_sizes[dataset_idx - 1]
-        return self.datasets[dataset_idx][sample_idx], dataset_idx
+# class ConcatDatasetWithIndex(ConcatDataset):
+#     """Modified from original pytorch code to return dataset idx"""
+#     def __getitem__(self, idx):
+#         if idx < 0:
+#             if -idx > len(self):
+#                 raise ValueError("absolute value of index should not exceed dataset length")
+#             idx = len(self) + idx
+#         dataset_idx = bisect.bisect_right(self.cumulative_sizes, idx)
+#         if dataset_idx == 0:
+#             sample_idx = idx
+#         else:
+#             sample_idx = idx - self.cumulative_sizes[dataset_idx - 1]
+#         return self.datasets[dataset_idx][sample_idx], dataset_idx
 
 
 class ImagePaths(Dataset):
@@ -60,29 +60,32 @@ class ImagePaths(Dataset):
         return example
 
 
-class NumpyPaths(ImagePaths):
-    def preprocess_image(self, image_path):
-        image = np.load(image_path)
-        image = Image.fromarray(image, mode="RGB")
-        image = np.array(image).astype(np.uint8)
-        image = self.preprocessor(image=image)["image"]
-        assert image.dtype == np.uint8, f"{image.dtype=}"
-        # image = (image/127.5 - 1.0).astype(np.float32)
-        return image
+# class NumpyPaths(ImagePaths):
+#     def preprocess_image(self, image_path):
+#         image = np.load(image_path)
+#         image = Image.fromarray(image, mode="RGB")
+#         image = np.array(image).astype(np.uint8)
+#         image = self.preprocessor(image=image)["image"]
+#         assert image.dtype == np.uint8, f"{image.dtype=}"
+#         # image = (image/127.5 - 1.0).astype(np.float32)
+#         return image
     
-root = './data/celebahq'
-with open("data/celebahqtrain.txt", "r") as f:
+root = './data/ffhq'
+with open("data/ffhqtrain.txt", "r") as f:
     relpaths = f.read().splitlines()
 paths = [os.path.join(root, relpath) for relpath in relpaths]
-data = NumpyPaths(paths=paths, size=256, random_crop=False)
+data = ImagePaths(paths=paths, size=256, random_crop=False)
+# data = NumpyPaths(paths=paths, size=256, random_crop=False)
 
-out_dir = './eval_fid/celeba256_ref'
+out_dir = './eval_fid/ffhq256_ref'
 os.makedirs(out_dir, exist_ok=True)
 
 import concurrent.futures
 
 def worker_fn(i, example, out_dir):
     image = example['image']
+    image = (image + 1.0) * 127.5
+    image = image.astype(np.uint8)
     image = Image.fromarray(image, mode='RGB')
     image.save(f'{out_dir}/{i:05d}.png')
 

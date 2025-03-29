@@ -8,6 +8,6 @@ assert data.dtype == np.uint8, 'Get dtype: {}'.format(data.dtype)
 from PIL import Image
 import os
 
-img = Image.fromarray(data)
+img = (data)
 os.makedirs('tmp', exist_ok=True)
 img.save('tmp/example.png')
